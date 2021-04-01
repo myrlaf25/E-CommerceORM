@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = require('./routes');
 // import sequelize connection
+const sequelize = require('./config/connection');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,6 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 // sync sequelize models to the database, then turn on the server
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}!`);
+//If force is true, each Model will run DROP TABLE IF EXISTS, before it tries to create its own table
+
+sequelize.sync({ force: true }).then(()=> { 
+app.listen(PORT, () => 
+  console.log(`App listening on port ${PORT}!`));
 });
