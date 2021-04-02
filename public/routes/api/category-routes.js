@@ -36,9 +36,15 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const newCategory = await Category.create(req.body);
-  // create a new category
-  return res.json(newCategory);
+    try{
+    const newCategory = await Category.create(req.body, {
+    include: {model: Product, attributes: ['product_name'],
+}
+})
+    res.status(200).json(newCategory);
+} catch (err) {
+    res.status(500).json(err);
+}
 });
 
 router.put('/:id', async (req, res) => {
