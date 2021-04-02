@@ -8,9 +8,9 @@ router.get('/', async (req, res) => {
     // be sure to include its associated Products
     try {
         const allCategories = await Category.findAll({
-            include: {
+            include: [{
                 model: Product, attributes: ['id', 'product_name', 'price', 'stock', 'category_id'],
-            }
+            }]
         })
         res.status(200).json(allCategories);
     } catch (err) {
@@ -41,12 +41,12 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const newCategory = await Category.create(req.body, {
+        const categoryData = await Category.create(req.body, {
             include: {
                 model: Product, attributes: ['product_name'],
             }
         })
-        res.status(200).json(newCategory);
+        res.status(200).json(categoryData);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -69,12 +69,12 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     // delete a category by its `id` value
-    const categoryData = await Category.destroy({
+    const deleteCat = await Category.destroy({
         where: {
             id: req.params.id,
         },
     });
-    return res.json(categoryData);
+    return res.json(deleteCat);
 });
 
 module.exports = router;
